@@ -66,6 +66,20 @@ First run will take a while to download all the required models.\
 You may edit the default config for your device or use case (change model, specify devices, etc...)\
 If you have the resources, strongly recommended to use bigger model and/or bigger quant method.
 
+### Default Model
+Aria now uses **Qwen2.5-14B-Instruct-1M-abliterated** (Q6_K quantization) by default:
+- Model size: ~12.2 GB
+- Recommended VRAM: 16GB+ (works well on RTX 4080 Super)
+- Downloads automatically on first run to HuggingFace cache
+- Abliterated version (uncensored) for unrestricted responses
+
+### Windows Users with WSL
+If you're developing with WSL but running Aria on Windows:
+1. Edit code in WSL using your preferred tools
+2. Run Aria directly on Windows for best GPU performance
+3. Use Windows terminal: `uv run python main.py`
+4. Flash-attn builds properly on native Windows with CUDA
+
 ### Non server/client mode:
 
 ```
@@ -93,7 +107,7 @@ python client.py
 ## Upcoming Features
 * Android client
 * Raspberry Pi client
-* Ollama support
+* Ollama support (currently uses GGUF format directly)
 
 ## Documentation
 Work in progress...

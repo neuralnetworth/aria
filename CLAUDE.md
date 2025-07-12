@@ -5,21 +5,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 Aria is a local AI voice assistant that provides real-time voice conversation capabilities using VAD, STT, LLM, and TTS technologies. It supports both standalone and client-server deployment modes.
 
+## Development Environment
+- **Code editing**: WSL (Windows Subsystem for Linux) with Claude Code
+- **Running Aria**: Native Windows for optimal GPU performance
+- **Package manager**: uv by Astral (replaces pip)
+- **Git remote**: https://github.com/neuralnetwork/aria
+- **Default LLM**: Qwen2.5-14B-Instruct-1M-abliterated (Q6_K GGUF, ~12.2GB)
+
 ## Common Development Commands
 
 ### Running the Application
 ```bash
-# Standalone mode (all components on one machine)
-python main.py
+# Using uv (recommended)
+uv run python main.py
 
 # Server mode (handles STT/LLM/TTS)
-python server.py
+uv run python server.py
 
 # Client mode (UI and audio I/O only)
-python client.py
+uv run python client.py
 
 # With custom config
-python main.py --config configs/myconfig.json
+uv run python main.py --config configs/myconfig.json
+
+# Note: Run these commands on Windows directly, not in WSL
 ```
 
 ### Docker Commands
@@ -33,12 +42,12 @@ docker run --net=host --gpus all --name aria-server -it ghcr.io/lef-fan/aria-ser
 
 ### Installation
 ```bash
-# Full installation (server/standalone)
+# Using uv (recommended - single mode for all deployments)
+uv sync
+
+# Legacy pip method (if needed)
 pip install -r requirements.txt
 pip install --no-build-isolation flash-attn==2.7.4.post1
-
-# Client-only installation
-pip install -r requirements_client.txt
 ```
 
 ## Architecture Overview
@@ -47,7 +56,7 @@ pip install -r requirements_client.txt
 1. **Audio Input** → `mic.py` captures audio from microphone
 2. **Voice Detection** → `vad.py` detects speech using Silero VAD
 3. **Speech Recognition** → `stt.py` transcribes using Whisper
-4. **Language Model** → `llm.py` generates response using Llama
+4. **Language Model** → `llm.py` generates response using Qwen2.5-14B (GGUF format)
 5. **Speech Synthesis** → `tts.py` converts to speech using Kokoro/Coqui
 6. **Audio Output** → `ap.py` plays the generated audio
 
@@ -93,7 +102,9 @@ pip install -r requirements_client.txt
   - Voice command recognition
 
 ## Important Notes
-- First run downloads several GB of model files
-- Requires CUDA-capable GPU for optimal performance
+- First run downloads several GB of model files (Qwen2.5 ~12.2GB + Whisper + TTS models)
+- Requires CUDA-capable GPU for optimal performance (16GB+ VRAM recommended)
 - Default credentials in config should be changed for production
 - Audio device configuration may need adjustment per system
+- Flash-attn requires native Windows environment to build properly (not WSL)
+- Models are stored in HuggingFace cache: `~/.cache/huggingface/hub/`
