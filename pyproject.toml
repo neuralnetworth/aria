@@ -14,7 +14,7 @@ dependencies = [
     "PyAudio==0.2.14",
     "opuslib==3.0.1",
     
-    # ML/AI frameworks
+    # ML/AI frameworks (torch must be before flash-attn)
     "torch==2.6.0",
     "torchaudio==2.6.0",
     "torchvision==0.21.0",
@@ -24,6 +24,9 @@ dependencies = [
     "deepspeed==0.16.3",
     "huggingface-hub==0.28.1",
     
+    # Performance optimization (requires torch to be installed first)
+    # "flash-attn==2.7.4.post1",  # Skipped - requires CUDA Toolkit to build
+    
     # LLM
     "llama-cpp-python==0.3.4",
     "ninja==1.11.1.3",
@@ -31,9 +34,6 @@ dependencies = [
     # TTS
     "kokoro==0.7.3",
     "coqui-tts==0.25.3",
-    
-    # Performance optimization
-    "flash-attn==2.7.4.post1",
 ]
 
 [tool.uv]
@@ -53,6 +53,10 @@ explicit = true
 torch = { index = "pytorch" }
 torchaudio = { index = "pytorch" }
 torchvision = { index = "pytorch" }
+
+# Override flash-attn to disable build isolation
+[tool.uv.pip]
+no-build-isolation-package = ["flash-attn"]
 
 [build-system]
 requires = ["hatchling"]

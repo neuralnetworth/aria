@@ -11,7 +11,16 @@
       "Bash(git add -A)",
       "Bash(git commit:*)",
       "WebFetch(domain:huggingface.co)",
-      "Bash(nvidia-smi:*)"
+      "Bash(nvidia-smi:*)",
+      "Bash(nvcc:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(node:*)",
+      "Bash(npx -y @smithery/cli install @upstash/context7-mcp --client claude)",
+      "Bash(npx:*)",
+      "Bash(grep:*)",
+      "Bash(python:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

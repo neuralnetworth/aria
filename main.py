@@ -34,26 +34,48 @@ def load_config(config_file):
 
 
 def main(ui, config):
-    vad_params = config.get("Vad", {}).get("params", {})
-    stt_params = config.get("Stt", {}).get("params", {})
-    llm_params = config.get("Llm", {}).get("params", {})
-    tts_params = config.get("Tts", {}).get("params", {})
-    ap_params = config.get("Ap", {}).get("params", {})
-    mic_params = config.get("Mic", {}).get("params", {})
+    try:
+        vad_params = config.get("Vad", {}).get("params", {})
+        stt_params = config.get("Stt", {}).get("params", {})
+        llm_params = config.get("Llm", {}).get("params", {})
+        tts_params = config.get("Tts", {}).get("params", {})
+        ap_params = config.get("Ap", {}).get("params", {})
+        mic_params = config.get("Mic", {}).get("params", {})
 
-    ui.add_message("system", "Loading...", new_entry=False)
-    print("Loading...")
+        ui.add_message("system", "Loading...", new_entry=False)
+        print("Loading...")
 
+    logging.info("Initializing VAD...")
     vad = Vad(params=vad_params)
+    logging.info("VAD initialized")
+    
+    logging.info("Initializing STT...")
     stt = Stt(params=stt_params)
+    logging.info("STT initialized")
+    
+    logging.info("Initializing LLM...")
     llm = Llm(params=llm_params)
+    logging.info("LLM initialized")
+    
+    logging.info("Initializing Audio Player...")
     ap = Ap(params=ap_params, ui=ui)
+    logging.info("Audio Player initialized")
+    
+    logging.info("Initializing TTS...")
     tts = Tts(params=tts_params, ap=ap)
+    logging.info("TTS initialized")
+    
+    logging.info("Initializing Microphone...")
     mic = Mic(params=mic_params, ui=ui, vad=vad)
+    logging.info("Microphone initialized")
 
     mic_muted = False
     mic_last_chunk = None
+    
+    logging.info("Playing listening sound...")
     ap.play_sound(ap.listening_sound)
+    logging.info("Listening sound played")
+    
     ui.load_visual("You")
     ui.add_message("system", "\nReady...", new_entry=False)
     print("Ready...\n\n🎙...", end=" ")

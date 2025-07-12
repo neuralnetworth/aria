@@ -2,6 +2,7 @@ import time
 import pyaudio
 import numpy as np
 import soundfile as sf
+import scipy.signal as signal
 
 
 class Ap:
@@ -44,6 +45,17 @@ class Ap:
         self.transition_sound, self.transition_sound_sr = sf.read(
             self.transition_sound_path
         )
+        
+        # Resample sounds to match the configured sample rate if needed
+        if self.listening_sound_sr != self.samplerate:
+            num_samples = int(len(self.listening_sound) * self.samplerate / self.listening_sound_sr)
+            self.listening_sound = signal.resample(self.listening_sound, num_samples)
+            self.listening_sound_sr = self.samplerate
+            
+        if self.transition_sound_sr != self.samplerate:
+            num_samples = int(len(self.transition_sound) * self.samplerate / self.transition_sound_sr)
+            self.transition_sound = signal.resample(self.transition_sound, num_samples)
+            self.transition_sound_sr = self.samplerate
 
     def _callback(self, in_data, frame_count, time_info, status):
         if self.audio_buffer is None:
@@ -78,8 +90,11 @@ class Ap:
             self.audio_buffer = np.concatenate((self.audio_buffer, chunk))
 
     def play_sound(self, sound):
+        # Convert stereo to mono if needed
+        if len(sound.shape) > 1 and sound.shape[1] > 1:
+            sound = np.mean(sound, axis=1)
+        
         for chunk_index in range(0, len(sound), self.buffer_size):
             chunk = sound[chunk_index : chunk_index + self.buffer_size]
-            chunk = np.mean(chunk, axis=1)
             self.stream_sound(np.int16(chunk * 32768))
         self.check_audio_finished()

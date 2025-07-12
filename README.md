@@ -34,14 +34,11 @@ uv sync
 
 ### Method 2 - Using pip (Traditional)
 ```bash
-pip install -r requirements.txt
-pip install --no-build-isolation flash-attn==2.7.4.post1
+# Install from pyproject.toml
+pip install -e .
+# Note: flash-attn requires CUDA Toolkit and may need manual installation
 ```
 
-### Method 3 - Docker (Server mode)
-```bash
-docker buildx build --tag ghcr.io/lef-fan/aria-server:latest .
-```
 
 (Tested on Arch Linux + NVIDIA GPUs with Python 3.12)
 
@@ -87,14 +84,7 @@ python main.py
 ```
 ### Server and Client Mode
 
-#### server machine - docker:
-```
-docker run --net=host --gpus all --name aria-server -it ghcr.io/lef-fan/aria-server:latest
-source venv/bin/activate
-python server.py
-```
-
-#### server machine - no docker:
+#### server machine:
 ```
 python server.py 
 ```

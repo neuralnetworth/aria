@@ -31,14 +31,6 @@ uv run python main.py --config configs/myconfig.json
 # Note: Run these commands on Windows directly, not in WSL
 ```
 
-### Docker Commands
-```bash
-# Build server image
-docker buildx build --tag ghcr.io/lef-fan/aria-server:latest .
-
-# Run server container
-docker run --net=host --gpus all --name aria-server -it ghcr.io/lef-fan/aria-server:latest
-```
 
 ### Installation
 ```bash
@@ -46,8 +38,8 @@ docker run --net=host --gpus all --name aria-server -it ghcr.io/lef-fan/aria-ser
 uv sync
 
 # Legacy pip method (if needed)
-pip install -r requirements.txt
-pip install --no-build-isolation flash-attn==2.7.4.post1
+pip install -e .
+# Note: flash-attn may require manual installation
 ```
 
 ## Architecture Overview
