@@ -8,22 +8,58 @@ https://github.com/lef-fan/aria/assets/23457676/d90b3f04-6d56-43a7-86ab-674fc558
 https://github.com/user-attachments/assets/362cdf14-e5f5-4855-aa5f-dc834fbca5ad
 
 ## Installation
-Clone the repo.
-### Method 1 - Easy installation for server/client mode using docker:
-```
-docker buildx build --tag ghcr.io/lef-fan/aria-server:latest .
-pip install -r requirements_client.txt
+
+### Prerequisites
+- Python 3.10 or higher
+- NVIDIA GPU with CUDA support (required for flash-attn)
+- System dependencies:
+  - **Ubuntu/Debian**: `sudo apt install python3.12-dev portaudio19-dev libopus-dev`
+  - **Arch Linux**: `sudo pacman -S python portaudio opus`
+  - **macOS**: `brew install portaudio opus`
+
+### Method 1 - Using uv (Recommended)
+[uv](https://github.com/astral-sh/uv) is a fast Python package manager that provides better dependency resolution and faster installations.
+
+```bash
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone the repo
+git clone https://github.com/neuralnetwork/aria.git
+cd aria
+
+# Install dependencies
+uv sync
 ```
 
-### Method 2 - Non docker server:
-```
+### Method 2 - Using pip (Traditional)
+```bash
 pip install -r requirements.txt
 pip install --no-build-isolation flash-attn==2.7.4.post1
 ```
 
-(Tested on Arch Linux + NVIDIA GPUs with python == 3.12)
+### Method 3 - Docker (Server mode)
+```bash
+docker buildx build --tag ghcr.io/lef-fan/aria-server:latest .
+```
 
-More are coming, work in progress...
+(Tested on Arch Linux + NVIDIA GPUs with Python 3.12)
+
+### Syncing Across Multiple Computers
+When using uv, you can easily sync your environment across multiple computers:
+
+```bash
+# On your first computer (after installation)
+git add uv.lock
+git commit -m "Add uv.lock for dependency sync"
+git push
+
+# On your other computers
+git pull
+uv sync
+```
+
+The `uv.lock` file ensures all your computers use exactly the same package versions.
 
 ## Usage
 First run will take a while to download all the required models.\

@@ -3,7 +3,12 @@
     "allow": [
       "Bash(find:*)",
       "Bash(ls:*)",
-      "Bash(ollama list:*)"
+      "Bash(ollama list:*)",
+      "Bash(uv:*)",
+      "Bash(python3.12:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)",
+      "Bash(git add -A)"
     ],
     "deny": []
   }
